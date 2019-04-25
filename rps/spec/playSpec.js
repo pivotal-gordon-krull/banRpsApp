@@ -1,11 +1,15 @@
 describe('play', () => {
     it('rock vs scissors', function () {
-        expect(new Requests().play('rock', 'scissors')).toBe('p1_wins')
+        const observer = jasmine.createSpyObj('observer', ['p1Wins']);
+
+        new Requests().play('rock', 'scissors', observer);
+
+        expect(observer.p1Wins).toHaveBeenCalled();
     });
 });
 
 function Requests() {
-    this.play = (p1, p2) => {
-        return 'p1_wins'
+    this.play = (p1, p2, observer) => {
+        return observer.p1Wins();
     }
 }
