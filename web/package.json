@@ -7,14 +7,14 @@
     "react-dom": "latest"
   },
   "devDependencies": {
-    "babel-core": "latest",
-    "babel-preset-env": "latest",
-    "babel-preset-react": "latest",
+    "watchify": "latest",
     "babelify": "latest",
-    "jasmine": "latest",
-    "watchify": "latest"
+    "@babel/core": "latest",
+    "@babel/preset-env": "latest",
+    "@babel/preset-react": "latest",
+    "jasmine": "latest"
   },
   "scripts": {
-    "compile-test": "watchify spec/webSpec.js -o bundled/compiledWebSpec.js -t [ babelify --presets [ es2015 react ] ]"
+    "compile-test": "watchify spec/*.js -o bundled/compiledWebSpec.js -t [ babelify --presets [ @babel/preset-env @babel/preset-react ] ]"
   }
 }
