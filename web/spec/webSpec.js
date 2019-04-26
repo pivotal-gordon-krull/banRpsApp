@@ -1,47 +1,74 @@
-import * as ReactDOM from "react-dom";
-import * as React from "react";
+import React from 'react'
+import * as ReactDOM from 'react-dom'
 
 class RPSApp extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {};
+    constructor() {
+        super()
+        this.state = {}
     }
 
     submitHandler() {
         this.setState({
-            result: 'INVALID!'
+            gameResult: 'INVALID!',
         })
     }
 
     render() {
-        return <div>
-            {this.state.result}
-            <button onClick={this.submitHandler.bind(this)}>PLAY</button>
-        </div>
+        return (
+            <div>
+                {this.state.gameResult}
+                <button onClick={this.submitHandler.bind(this)}>Play</button>
+            </div>
+        )
     }
 }
 
-describe("play form", function () {
-    describe("when the play use case tells the UI the input is invalid", function () {
-        it('should tell the user that their input is invalid', function () {
-            let domFixture = document.createElement('div');
-            document.body.appendChild(domFixture);
+describe('play form', function () {
+    let domFixture
 
-            let alwaysInvalidRequest = {
-                play: (p1, p2, observer) => observer.invalid()
-            }
-
-            ReactDOM.render(
-                <RPSApp requests={alwaysInvalidRequest}/>,
-                domFixture
-            );
-
-
-            expect(domFixture.innerText).not.toContain('INVALID!');
-
-            document.querySelector('button').click();
-
-            expect(domFixture.innerText).toContain('INVALID!');
-        });
+    beforeEach(function () {
+        setupDOM()
     })
+
+    afterEach(function () {
+        cleanupDOM()
+    })
+
+    describe('when the play use case tells the UI that the input is invalid', () => {
+        beforeEach(function () {
+            renderApp({play: (p1, p2, observer) => observer.invalidInput()})
+        })
+
+        it('tells the user that their input is invalid', () => {
+            expect(page()).not.toContain('INVALID!')
+
+            submitForm()
+
+            expect(page()).toContain('INVALID!')
+        })
+    })
+
+    function setupDOM() {
+        domFixture = document.createElement('div')
+        document.body.appendChild(domFixture)
+    }
+
+    function cleanupDOM() {
+        domFixture.remove()
+    }
+
+    function renderApp(round) {
+        ReactDOM.render(
+            <RPSApp round={round}/>,
+            domFixture
+        )
+    }
+
+    function page() {
+        return domFixture.innerText
+    }
+
+    function submitForm() {
+        document.querySelector('button').click()
+    }
 })
