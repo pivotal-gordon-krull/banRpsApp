@@ -4,6 +4,7 @@ import ReactTestUtils from 'react-dom/test-utils'
 import RPSApp from "../src/RPSApp";
 
 describe('play form', function () {
+
     let domFixture
 
     beforeEach(function () {
@@ -90,6 +91,16 @@ describe('play form', function () {
         })
     })
 
+    describe('there is no rounds', () => {
+        it('should not show rounds', function () {
+            renderHistory({getHistory: (observer) => observer.noRounds()})
+
+            expect(page()).toContain('NO ROUNDS');
+        });
+
+    });
+
+
     function setupDOM() {
         domFixture = document.createElement('div')
         document.body.appendChild(domFixture)
@@ -102,6 +113,13 @@ describe('play form', function () {
     function renderApp(round) {
         ReactDOM.render(
             <RPSApp round={round}/>,
+            domFixture
+        )
+    }
+
+    function renderHistory(round) {
+        ReactDOM.render(
+            <RPSHistory round={round}/>,
             domFixture
         )
     }
@@ -120,3 +138,13 @@ describe('play form', function () {
         document.querySelector('button').click()
     }
 })
+
+class RPSHistory extends React.Component {
+    constructor() {
+        super();
+    }
+
+    render() {
+        return (<div>NO ROUNDS</div>);
+    }
+}
