@@ -2,6 +2,14 @@ function Round() {
     this.play = (player1Throw, player2Throw, observer, repo) => {
         new PlayRound(player1Throw, player2Throw, observer, repo).process()
     }
+
+    this.getHistory = (observer, repo) => {
+        if (repo.isEmpty()) {
+            observer.noRounds();
+        } else {
+            observer.rounds(repo.getAll())
+        }
+    }
 }
 
 function PlayRound(player1Throw, player2Throw, observer, repo) {
@@ -11,11 +19,13 @@ function PlayRound(player1Throw, player2Throw, observer, repo) {
             repo.save(new RoundResult(player1Throw, player2Throw, 'invalid'));
         } else if (tie()) {
             observer.tie()
+            repo.save(new RoundResult(player1Throw, player2Throw, 'tie'));
         } else if (player1WinsScenarios()) {
-            repo.save(new RoundResult(player1Throw, player2Throw, 'p1_wins'));
             observer.player1Wins()
+            repo.save(new RoundResult(player1Throw, player2Throw, 'p1_wins'));
         } else {
             observer.player2Wins()
+            repo.save(new RoundResult(player1Throw, player2Throw, 'p2_wins'));
         }
     }
 
