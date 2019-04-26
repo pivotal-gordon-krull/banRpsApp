@@ -1,16 +1,18 @@
 function Round() {
-    this.play = (player1Throw, player2Throw, observer) => {
-        new PlayRound(player1Throw, player2Throw, observer).process()
+    this.play = (player1Throw, player2Throw, observer, repo) => {
+        new PlayRound(player1Throw, player2Throw, observer, repo).process()
     }
 }
 
-function PlayRound(player1Throw, player2Throw, observer) {
+function PlayRound(player1Throw, player2Throw, observer, repo) {
     this.process = () => {
         if (invalid(player1Throw) || invalid(player2Throw)) {
             observer.invalid()
+            repo.save(new RoundResult(player1Throw, player2Throw, 'invalid'));
         } else if (tie()) {
             observer.tie()
         } else if (player1WinsScenarios()) {
+            repo.save(new RoundResult(player1Throw, player2Throw, 'p1_wins'));
             observer.player1Wins()
         } else {
             observer.player2Wins()
@@ -40,4 +42,11 @@ function PlayRound(player1Throw, player2Throw, observer) {
     const VALID_THROWS = [THROW.ROCK, THROW.SCISSORS, THROW.PAPER]
 }
 
-module.exports = {Round}
+function RoundResult(p1Throw, p2Throw, result) {
+    this.p1Throw = p1Throw;
+    this.p2Throw = p2Throw;
+    this.result = result;
+
+}
+
+module.exports = {Round, RoundResult}
