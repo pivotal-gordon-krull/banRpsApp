@@ -1,17 +1,20 @@
 const {Round, RoundResult} = require('../src/rps')
+const {FakeRoundRepo} = require('./fakeRoundRepo')
 
-describe('history', () => {
+
+fdescribe('history', () => {
     it('should save the game result after a game has been played and is invalid', function () {
-        let spyRepo = jasmine.createSpyObj('repo', ['save']);
+        let repo = new FakeRoundRepo();
 
         let playRoundObserver = {
             invalid() {
             }
         }
 
-        new Round().play('rock', 'sailboat', playRoundObserver, spyRepo);
+        new Round().play('rock', 'sailboat', playRoundObserver, repo);
 
-        expect(spyRepo.save).toHaveBeenCalledWith(new RoundResult('rock', 'sailboat', 'invalid'))
+        expect(repo.getAll()).toEqual([new RoundResult('rock', 'sailboat', 'invalid')])
+
     });
 
     it('should save the game result after a game has been played and p1 wins', function () {

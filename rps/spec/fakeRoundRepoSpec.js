@@ -1,37 +1,30 @@
 const {RoundResult} = require("../src/rps");
+const {FakeRoundRepo} = require('./fakeRoundRepo')
 
-function FakeRoundRepo() {
-    let isEmpty = true;
+describe('fake round repo', () => {
+    let repo;
 
-    this.isEmpty = () => {
-        return isEmpty;
-    }
-
-    this.save = () => {
-        isEmpty = false;
-    }
-
-    this.getAll = () => {
-
-    }
-}
-
-fdescribe('fake round repo', () => {
+    beforeEach(function () {
+        repo = new FakeRoundRepo();
+    });
     describe('when no rounds have been saved', () => {
         it('should be empty', function () {
-            let repo = new FakeRoundRepo();
-
             expect(repo.isEmpty()).toBeTruthy();
         });
     });
 
     describe('when rounds have been saved', () => {
         it('should not be empty', function () {
-            let repo = new FakeRoundRepo();
-
             repo.save(new RoundResult());
 
             expect(repo.isEmpty()).toBeFalsy();
+        });
+
+        it('should return saved rounds', function () {
+            const round = new RoundResult();
+            repo.save(round);
+
+            expect(repo.getAll()).toEqual([round]);
         });
     });
 });
