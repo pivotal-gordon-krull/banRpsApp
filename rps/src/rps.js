@@ -1,9 +1,9 @@
-function Round() {
-    this.play = (player1Throw, player2Throw, observer, repo) => {
+function Round(repo) {
+    this.play = (player1Throw, player2Throw, observer) => {
         new PlayRound(player1Throw, player2Throw, observer, repo).process()
     }
 
-    this.getHistory = (observer, repo) => {
+    this.getHistory = (observer) => {
         if (repo.isEmpty()) {
             observer.noRounds();
         } else {

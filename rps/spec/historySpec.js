@@ -11,7 +11,7 @@ describe('history', () => {
             }
         }
 
-        new Round().play('rock', 'sailboat', playRoundObserver, spyRepo);
+        new Round(spyRepo).play('rock', 'sailboat', playRoundObserver, spyRepo);
 
         expect(spyRepo.save).toHaveBeenCalledWith(new RoundResult('rock', 'sailboat', 'invalid'))
     });
@@ -24,7 +24,7 @@ describe('history', () => {
             }
         }
 
-        new Round().play('rock', 'scissors', playRoundObserver, spyRepo);
+        new Round(spyRepo).play('rock', 'scissors', playRoundObserver, spyRepo);
 
         expect(spyRepo.save).toHaveBeenCalledWith(new RoundResult('rock', 'scissors', 'p1_wins'))
     });
@@ -37,7 +37,7 @@ describe('history', () => {
             }
         }
 
-        new Round().play('scissors', 'rock', playRoundObserver, spyRepo);
+        new Round(spyRepo).play('scissors', 'rock', playRoundObserver, spyRepo);
 
         expect(spyRepo.save).toHaveBeenCalledWith(new RoundResult('scissors', 'rock', 'p2_wins'))
     });
@@ -50,7 +50,7 @@ describe('history', () => {
             }
         }
 
-        new Round().play('rock', 'rock', playRoundObserver, spyRepo);
+        new Round(spyRepo).play('rock', 'rock', playRoundObserver, spyRepo);
 
         expect(spyRepo.save).toHaveBeenCalledWith(new RoundResult('rock', 'rock', 'tie'))
     });
@@ -66,7 +66,7 @@ describe('history', () => {
             it('should tell the observer there are no rounds', function () {
                 let observer = jasmine.createSpyObj('observer', ['noRounds'])
 
-                new Round().getHistory(observer, repo)
+                new Round(repo).getHistory(observer, repo)
 
                 expect(observer.noRounds).toHaveBeenCalled()
             });
@@ -78,7 +78,7 @@ describe('history', () => {
                 repo.save(new RoundResult('rock', 'sailboat', 'invalid'))
                 let observer = jasmine.createSpyObj('observer', ['rounds'])
 
-                new Round().getHistory(observer, repo)
+                new Round(repo).getHistory(observer, repo)
 
                 expect(observer.rounds).toHaveBeenCalledWith([new RoundResult('rock', 'sailboat', 'invalid')])
             });

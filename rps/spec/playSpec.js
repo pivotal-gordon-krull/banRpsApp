@@ -5,8 +5,8 @@ describe('play', () => {
     let round, observer, repo
 
     beforeEach(() => {
-        round = new Round()
         repo = new FakeRoundRepo()
+        round = new Round(repo)
     })
 
     describe('player 1 wins scenarios', () => {
