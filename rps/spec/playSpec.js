@@ -1,10 +1,12 @@
 const {Round} = require('../src/rps')
+const {FakeRoundRepo} = require('../src/fakeRoundRepo')
 
 describe('play', () => {
-    let round, observer
+    let round, observer, repo
 
     beforeEach(() => {
         round = new Round()
+        repo = new FakeRoundRepo()
     })
 
     describe('player 1 wins scenarios', () => {
@@ -13,17 +15,17 @@ describe('play', () => {
         })
 
         it('rock vs scissors', () => {
-            round.play('rock', 'scissors', observer)
+            round.play('rock', 'scissors', observer, repo)
             expect(observer.player1Wins).toHaveBeenCalled()
         })
 
         it('scissors vs paper', () => {
-            round.play('scissors', 'paper', observer)
+            round.play('scissors', 'paper', observer, repo)
             expect(observer.player1Wins).toHaveBeenCalled()
         })
 
         it('paper vs rock', () => {
-            round.play('paper', 'rock', observer)
+            round.play('paper', 'rock', observer, repo)
             expect(observer.player1Wins).toHaveBeenCalled()
         })
     })
@@ -34,17 +36,17 @@ describe('play', () => {
         })
 
         it('scissors vs rock', () => {
-            round.play('scissors', 'rock', observer)
+            round.play('scissors', 'rock', observer, repo)
             expect(observer.player2Wins).toHaveBeenCalled()
         })
 
         it('paper vs scissors', () => {
-            round.play('paper', 'scissors', observer)
+            round.play('paper', 'scissors', observer, repo)
             expect(observer.player2Wins).toHaveBeenCalled()
         })
 
         it('rock vs paper', () => {
-            round.play('rock', 'paper', observer)
+            round.play('rock', 'paper', observer, repo)
             expect(observer.player2Wins).toHaveBeenCalled()
         })
     })
@@ -55,17 +57,17 @@ describe('play', () => {
         })
 
         it('rock vs rock', () => {
-            round.play('rock', 'rock', observer)
+            round.play('rock', 'rock', observer, repo)
             expect(observer.tie).toHaveBeenCalled()
         })
 
         it('scissors vs scissors', () => {
-            round.play('scissors', 'scissors', observer)
+            round.play('scissors', 'scissors', observer, repo)
             expect(observer.tie).toHaveBeenCalled()
         })
 
         it('paper vs paper', () => {
-            round.play('paper', 'paper', observer)
+            round.play('paper', 'paper', observer, repo)
             expect(observer.tie).toHaveBeenCalled()
         })
     })
@@ -76,17 +78,17 @@ describe('play', () => {
         })
 
         it('invalid vs rock', () => {
-            round.play('invalid throw', 'rock', observer)
+            round.play('invalid throw', 'rock', observer, repo)
             expect(observer.invalid).toHaveBeenCalled()
         })
 
         it('rock vs invalid', () => {
-            round.play('rock', 'invalid throw', observer)
+            round.play('rock', 'invalid throw', observer, repo)
             expect(observer.invalid).toHaveBeenCalled()
         })
 
         it('invalid vs invalid', () => {
-            round.play('invalid throw', 'spock', observer)
+            round.play('invalid throw', 'spock', observer, repo)
             expect(observer.invalid).toHaveBeenCalled()
         })
     })

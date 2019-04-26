@@ -1,20 +1,19 @@
 const {Round, RoundResult} = require('../src/rps')
-const {FakeRoundRepo} = require('./fakeRoundRepo')
 
+const {FakeRoundRepo} = require('../src/fakeRoundRepo')
 
-fdescribe('history', () => {
+describe('history', () => {
     it('should save the game result after a game has been played and is invalid', function () {
-        let repo = new FakeRoundRepo();
+        let spyRepo = jasmine.createSpyObj('repo', ['save']);
 
         let playRoundObserver = {
             invalid() {
             }
         }
 
-        new Round().play('rock', 'sailboat', playRoundObserver, repo);
+        new Round().play('rock', 'sailboat', playRoundObserver, spyRepo);
 
-        expect(repo.getAll()).toEqual([new RoundResult('rock', 'sailboat', 'invalid')])
-
+        expect(spyRepo.save).toHaveBeenCalledWith(new RoundResult('rock', 'sailboat', 'invalid'))
     });
 
     it('should save the game result after a game has been played and p1 wins', function () {
@@ -57,17 +56,17 @@ fdescribe('history', () => {
     });
 
     describe('getHistory', () => {
+        let repo;
+
+        beforeEach(function () {
+           repo = new FakeRoundRepo()
+        });
+
         describe('no one has played', () => {
             it('should tell the observer there are no rounds', function () {
-                let stubRepo = {
-                    isEmpty() {
-                        return true
-                    }
-                }
-
                 let observer = jasmine.createSpyObj('observer', ['noRounds'])
 
-                new Round().getHistory(observer, stubRepo)
+                new Round().getHistory(observer, repo)
 
                 expect(observer.noRounds).toHaveBeenCalled()
             });
@@ -76,17 +75,10 @@ fdescribe('history', () => {
 
         describe('games have been played', () => {
             it('should tell the observer all the rounds played', function () {
-                let stubRepo = {
-                    isEmpty() {
-                        return false
-                    },
-                    getAll() {
-                        return [new RoundResult('rock', 'sailboat', 'invalid')]
-                    }
-                }
+                repo.save(new RoundResult('rock', 'sailboat', 'invalid'))
                 let observer = jasmine.createSpyObj('observer', ['rounds'])
 
-                new Round().getHistory(observer, stubRepo)
+                new Round().getHistory(observer, repo)
 
                 expect(observer.rounds).toHaveBeenCalledWith([new RoundResult('rock', 'sailboat', 'invalid')])
             });

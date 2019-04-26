@@ -1,5 +1,5 @@
 const {RoundResult} = require("../src/rps");
-const {FakeRoundRepo} = require('./fakeRoundRepo')
+const {FakeRoundRepo} = require('../src/fakeRoundRepo')
 
 describe('fake round repo', () => {
     let repo;
